@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<title>Konu Dağılımı</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" href="../static/favicon.ico">
+<link rel="stylesheet" href="../static/main.css">
+
+<body class="w3-light-grey">
+
+    <!-- Top container -->
+    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+        <a href="/search">
+            <span class="w3-bar-item">
+                <i class="fa fa-search"></i>
+            </span>
+        </a>
+        <a href="/">
+            <span class="w3-bar-item w3-right">
+                <img src="../static/favicon.ico" alt="" style="width:32px;height:32px;">
+            </span>
+        </a>
+    </div>
+
+    <!-- Sidebar/menu -->
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:200px;" id="mySidebar"><br>
+        <div class="w3-container">
+            <h5>Panel</h5>
+        </div>
+        <div class="w3-bar-block">
+            <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()"
+                title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+            <a href="/" class="w3-bar-item w3-button w3-padding"><i class="fa fa-desktop fa-fw"></i>  Anasayfa</a>
+            <a href="/students" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Öğrenciler</a>
+            <a href="/topics" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags fa-fw"></i>  Konular</a>
+            <a href="/internships" class="w3-bar-item w3-button w3-padding"><i class="fa fa-code fa-fw"></i>  Stajlar</a>
+            <a href="/interviews" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw"></i> 
+                Mülakatlar</a>
+            <a href="/topics_chart" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-pie-chart fa-fw"></i> 
+                Konu Dağılımı</a>
+            <a href="/success_by_topics_chart" class="w3-bar-item w3-button w3-padding"><i class="fa fa-trophy fa-fw"></i>
+                Konu Başarı Oranı</a>
+            <a href="/success_by_cities" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map fa-fw"></i>  İl
+                Başarı Oranı</a>
+            <a href="/settings" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Ayarlar</a><br><br>
+        </div>
+    </nav>
+
+    <!-- !PAGE CONTENT! -->
+    <div class="w3-main" style="margin-left:200px;margin-top:43px;">
+
+        <!-- Header -->
+        <header class="w3-container" style="padding-top:22px">
+            <h5><b><i class="fa fa-pie-chart"></i> Girilen Yıla Göre Staj Konu Başlıkları Dağılım Grafiği ({{year}})</b></h5>
+            <form action="/topics_chart" method="POST">
+                <b>YIL :</b> <input style="padding:6px" name="year" type="number" pattern="[0-9]{4}" required>
+                <button class="w3-button w3-black">SUBMIT</button>
+            </form>
+        </header>
+
+        <div class="w3-panel">
+            <div id="piechart-topics"></div>
+        </div>
+        <hr>
+
+        <!-- End page content -->
+    </div>
+</body>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    // Load google charts
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Draw the chart and set the chart values
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable({{ data_topics| tojson }});
+
+    // Optional; add a title and set the width and height of the chart
+    var options = { 'title': 'Staj Konu Başlığı Dağılım Oranı', 'width': 1048, 'height': 500 };
+
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById('piechart-topics'));
+    chart.draw(data, options);
+    }
+</script>
+
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<title>Stajlar</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" href="../static/favicon.ico">
+<link rel="stylesheet" href="../static/main.css">
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    body {font-family: Arial, Helvetica, sans-serif;}
+    
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        padding-left: 20%;
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 10px;
+        border: 1px solid #888;
+        width: 50%;
+    }
+    
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    * {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -16px;
+}
+
+.col-25 {
+  flex: 25%;
+}
+
+.col-50 {
+  flex: 50%;
+}
+
+.col-75 {
+  -ms-flex: 75%; /* IE10 */
+  flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 16px;
+}
+
+.container {
+  background-color: #f2f2f2;
+  padding: 5px 20px 15px 20px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+}
+
+input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+}
+</style>
+
+<body class="w3-light-grey">
+
+    <!-- Top container -->
+    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+        <a href="/search">
+            <span class="w3-bar-item">
+                <i class="fa fa-search"></i>
+            </span>
+        </a>
+        <a href="/">
+            <span class="w3-bar-item w3-right">
+                <img src="../static/favicon.ico" alt="" style="width:32px;height:32px;">
+            </span>
+        </a>
+    </div>
+
+    <!-- Sidebar/menu -->
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:200px;" id="mySidebar"><br>
+        <div class="w3-container">
+            <h5>Panel</h5>
+        </div>
+        <div class="w3-bar-block">
+            <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()"
+                title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+            <a href="/" class="w3-bar-item w3-button w3-padding"><i class="fa fa-desktop fa-fw"></i>  Anasayfa</a>
+            <a href="/students" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Öğrenciler</a>
+            <a href="/topics" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags fa-fw"></i>  Konular</a>
+            <a href="/internships" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-code fa-fw"></i> 
+                Stajlar</a>
+            <a href="/interviews" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calendar fa-fw"></i> 
+                Mülakatlar</a>
+            <a href="/topics_chart" class="w3-bar-item w3-button w3-padding"><i class="fa fa-pie-chart fa-fw"></i> 
+                Konu Dağılımı</a>
+            <a href="/success_by_topics_chart" class="w3-bar-item w3-button w3-padding"><i class="fa fa-trophy fa-fw"></i>
+                Konu Başarı Oranı</a>
+            <a href="/success_by_cities" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map fa-fw"></i>  İl
+                Başarı Oranı</a>
+            <a href="/settings" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Ayarlar</a><br><br>
+        </div>
+    </nav>
+
+    <!-- !PAGE CONTENT! -->
+    <div class="w3-main" style="margin-top:43px; margin-left: 200px">
+
+        <!-- Header -->
+        <header class="w3-container" style="padding-top:22px">
+            <button id="btnAddInternship" class="w3-button w3-left w3-black"><i class="fa fa-plus"></i> Staj Ekle</button>
+            <button class="w3-button w3-right w3-green"><i class="fa fa-file-excel-o"></i> Excel Al</button>
+            <button class="w3-button w3-right w3-red"><i class="fa fa-file-pdf-o"></i> PDF Al</button>
+        </header>
+
+        {% if uninterviewed_internships %}
+        <div class="w3-panel">
+            <h5>Değerlendirilmeyen Stajlar</h5>
+            <table id="internships" style="width:100%" class="w3-table w3-striped w3-bordered w3-border w3-white">
+
+                <tr>
+                    <th style="text-align:center">Öğrenci No</th>
+                    <th style="text-align:center">Kurum</th>
+                    <th style="text-align:center">Şehir</th>
+                    <th style="text-align:center">Baslangıç</th>
+                    <th style="text-align:center">Bitiş</th>
+                    <th style="text-align:center">Toplam</th>
+                    <th style="text-align:center">Staj Konusu</th>
+                    <th style="text-align:center">Sınıf</th>
+                    <th style="text-align:center">Kabul Edilen</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                {% for i in uninterviewed_internships %}
+                <tr>
+                    <td style="text-align:center"> {{ i.ogrenci_no }} </td>
+                    <td style="text-align:center"> {{ i.kurum_adi }} </td>
+                    <td style="text-align:center"> {{ i.sehir }} </td>
+                    <td style="text-align:center"> {{ i.baslama_tarihi }} </td>
+                    <td style="text-align:center"> {{ i.bitis_tarihi }} </td>
+                    <td style="text-align:center"> {{ i.toplam_gun }} </td>
+                    <td style="text-align:center"> {{ i.staj_konusu }} </td>
+                    <td style="text-align:center"> {{ i.ogrenci_sinif }} </td>
+                    <td style="text-align:center"> {{ i.kabul_edilen_gun }} </td>
+                    <td><a href="/internships/{{i.ogrenci_no}}/{{i.baslama_tarihi}}/interview"><i class="fa fa-calendar w3-text-blue w3-large"></i></a></td>
+                    <td><a href="/internships/{{i.ogrenci_no}}/{{i.baslama_tarihi}}/delete"><i class="fa fa-remove w3-text-blue w3-large"></i></a></td>
+                </tr>
+                {% endfor %}
+            </table><br>
+        </div>
+        {% endif %}
+
+        {% if interviewed_internships %}
+        <div class="w3-panel">
+            <h5>Değerlendirilen Stajlar</h5>
+            <table id="internships" style="width:100%" class="w3-table w3-striped w3-bordered w3-border w3-white">
+
+                <tr>
+                    <th style="text-align:center">Öğrenci No</th>
+                    <th style="text-align:center">Kurum</th>
+                    <th style="text-align:center">Şehir</th>
+                    <th style="text-align:center">Baslangıç</th>
+                    <th style="text-align:center">Bitiş</th>
+                    <th style="text-align:center">Toplam</th>
+                    <th style="text-align:center">Staj Konusu</th>
+                    <th style="text-align:center">Sınıf</th>
+                    <th style="text-align:center">Kabul Edilen</th>
+                    <th></th>
+                </tr>
+                {% for i in interviewed_internships %}
+                <tr>
+                    <td style="text-align:center"> {{ i.ogrenci_no }} </td>
+                    <td style="text-align:center"> {{ i.kurum_adi }} </td>
+                    <td style="text-align:center"> {{ i.sehir }} </td>
+                    <td style="text-align:center"> {{ i.baslama_tarihi }} </td>
+                    <td style="text-align:center"> {{ i.bitis_tarihi }} </td>
+                    <td style="text-align:center"> {{ i.toplam_gun }} </td>
+                    <td style="text-align:center"> {{ i.staj_konusu }} </td>
+                    <td style="text-align:center"> {{ i.ogrenci_sinif }} </td>
+                    <td style="text-align:center"> {{ i.kabul_edilen_gun }} </td>
+                    <td><a href="/internships/{{i.ogrenci_no}}/{{i.baslama_tarihi}}/delete"><i class="fa fa-remove w3-text-blue w3-large"></i></a></td>
+                </tr>
+                {% endfor %}
+            </table><br>
+        </div>
+        {% endif %}
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="row">
+                    <div class="col-75">
+                        <div class="container">
+                            <form action="/internships" method="POST">
+                                {% if students %}
+                                <label class="w3-center" for="ogrenci">Öğrenci</label>
+                                <select style="width:100%; margin-bottom: 4%" id="ogrenci" name="ogrenci_no">
+                                    {% for s in students %}
+                                    <option value="{{s.ogrenci_no}}">{{ s.ogrenci_no|string + " - " + s.isim +
+                                        " " + s.soyisim }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col-50">
+                                        <label for="kurum_adi">Kurum</label>
+                                        <input id="kurum_adi" type="text" name="kurum_adi" required>
+                                        {% if cities %}
+                                        <label for="sehir">Şehir</label>
+                                        <select id="sehir" style="width:100%;" name="sehir">
+                                            {% for c in cities %}
+                                            <option value="{{c}}">{{ c }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% endif %}
+                                        <label style="margin-top:25px" for="baslangic">Başlangıç</label>
+                                        <input id="baslangic" placeholder="YYYY-AA-GG" type="text" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                                            name="baslama_tarihi" required>
+                                    </div>
+
+                                    <div class="col-50">
+                                        <label for="bitis">Bitiş</label>
+                                        <input id="bitis" placeholder="YYYY-AA-GG" type="text" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                                            name="bitis_tarihi" required>
+                                        <label for="toplam">Toplam</label>
+                                        <input id="toplam" type="number" name="toplam_gun" min="15" required>
+                                        <label style="margin-top: 11%" class="w3-center" for="ogrenci_sinif">Sınıf</label>
+                                        <select style="width:100%;" id="ogrenci_sinif" name="ogrenci_sinif">
+                                            <option value=2>2</option>
+                                            <option value=3>3</option>
+                                            <option value=4>4</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {% if topics %}
+                                <label class="w3-center" for="staj_konusu">Staj Konusu</label>
+                                <select style="width:100%;" id="staj_konusu" name="staj_konusu">
+                                    {% for t in topics %}
+                                    <option value="{{t.isim}}">{{ t.isim }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                                <p style="text-align:center">
+                                    Ekleme yaptığınız staj dgs öğrencisine ait eski bir staj mı?
+                                    <select style="width:100%;" name="dgs_mi">
+                                        <option value="Evet"> Evet </option>
+                                        <option value="Hayir"> Hayır </option>
+                                    </select>
+                                </p>
+                                <input onclick="onClickButton()" type="submit" value="Staj Ekle" class="w3-button w3-black"
+                                    style="width:100%">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End page content -->
+    </div>
+
+    <script>
+        function onClickButton() {
+            var toplam_gun = document.getElementsByName('toplam_gun')[0];
+            var sinif = document.getElementsByName('ogrenci_sinif')[0];
+            var staj_konusu = document.getElementById('staj_konusu')
+
+            if (staj_konusu.value.toUpperCase() !== 'ARGE') {
+                if (sinif.value == 2) {
+                    toplam_gun.max = 25;
+                }
+                else {
+                    toplam_gun.max = 10000000000000;
+                }
+            }
+        }
+    </script>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        //var btn = document.getElementById("myBtn");
+        var btnAddInternship = document.getElementById("btnAddInternship");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+
+        btnAddInternship.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
